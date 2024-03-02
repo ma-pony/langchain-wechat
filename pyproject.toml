@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "langchain-wechat"
+version = "0.1.0"
+description = ""
+authors = ["Pony.Ma <mtf201013@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+langchain = "^0.1.9"
+langchain-openai = "^0.0.8"
+pydantic-settings = "^2.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
