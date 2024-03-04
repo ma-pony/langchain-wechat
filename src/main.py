@@ -9,13 +9,15 @@ def main():
         openai_api_key=settings.OPENAI_API_KEY,
         model_name=settings.OPENAI_MODEL,
     )
-    chat.invoke(
+    res = chat.invoke(
         [
             HumanMessage(
-                content="Translate this sentence from English to French: I love programming."
+                content="Translate this sentence from English to French: I am programming."
             )
         ]
     )
+
+    print(res)
 
 
 if __name__ == '__main__':
