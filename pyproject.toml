@@ -12,6 +12,9 @@ langchain-openai = "^0.0.8"
 pydantic-settings = "^2.2.1"
 fastapi = "^0.110.0"
 uvicorn = "^0.27.1"
+loguru = "^0.7.2"
+qrcode = {extras = ["pil"], version = "^7.4.2"}
+pyqrcode = "^1.2.1"
 
 
 [build-system]

@@ -61,7 +61,7 @@ def login(self, enableCmdQR=False, picDir=None, qrCallback=None,
             status = self.check_login()
             if hasattr(qrCallback, '__call__'):
                 qrCallback(uuid=self.uuid, status=status,
-                           qrcode=qrStorage.getvalue())
+                           qr_code=qrStorage.getvalue())
             if status == '200':
                 isLoggedIn = True
             elif status == '201':
@@ -129,7 +129,7 @@ def get_QR(self, uuid=None, enableCmdQR=False, picDir=None, qrCallback=None):
     qrCode = QRCode('https://login.weixin.qq.com/l/' + uuid)
     qrCode.png(qrStorage, scale=10)
     if hasattr(qrCallback, '__call__'):
-        qrCallback(uuid=uuid, status='0', qrcode=qrStorage.getvalue())
+        qrCallback(uuid=uuid, status='0', qr_code=qrStorage.getvalue())
     else:
         with open(picDir, 'wb') as f:
             f.write(qrStorage.getvalue())

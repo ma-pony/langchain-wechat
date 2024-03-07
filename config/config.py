@@ -29,5 +29,10 @@ class Settings(BaseSettings):
 
     DEBUG: bool = False
 
+    # openai
     OPENAI_MODEL: str = "gpt-3.5-turbo"
     OPENAI_API_KEY: str = "sk-1234567890"
+
+    # itchat
+    WECHAT_HOT_RELOAD: bool = False
+    WECHAT_USER_DATA_STORAGE_PATH: str = "storage"
