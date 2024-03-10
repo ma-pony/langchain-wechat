@@ -30,8 +30,12 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     # openai
-    OPENAI_MODEL: str = "gpt-3.5-turbo"
+    OPENAI_MODEL: str = "gpt-3.5-turbo-1106"
     OPENAI_API_KEY: str = "sk-1234567890"
+
+    # AI
+    AI_TEMPERATURE: float = 0.5
+    AI_SYSTEM_PROMPT: str = "你是一个有用的助手,尽你所能回答所有问题."
 
     # itchat
     WECHAT_HOT_RELOAD: bool = False
