@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -102,3 +103,32 @@ class MessageModel(BaseModel):
     type: MessageTypeEnum = Field(..., alias="Type")
     text: str | list[str] = Field(..., alias="Text")
     system_info: str = Field(default=None, alias="SystemInfo")
+
+
+class ChatRoomMember(BaseModel):
+    member_list: list = Field(default=None, alias="MemberList")
+    uin: int = Field(..., alias="Uin")
+    user_name: str = Field(..., alias="UserName")
+    nick_name: str = Field(..., alias="NickName")
+    attr_status: int = Field(..., alias="AttrStatus")
+    py_initial: str = Field(..., alias="PYInitial")
+    remark_py_initial: str = Field(..., alias="RemarkPYInitial")
+    remark_py_quan_pin: str = Field(..., alias="RemarkPYQuanPin")
+    member_status: int = Field(..., alias="MemberStatus")
+    display_name: str = Field(..., alias="DisplayName")
+    key_word: str = Field(..., alias="KeyWord")
+
+
+class GroupModel(UserModel):
+    is_admin: Optional[int] = Field(default=None, alias="IsAdmin")
+    self: ChatRoomMember = Field(..., alias="Self")
+    head_img_update_flag: int = Field(..., alias="HeadImgUpdateFlag")
+    contact_type: int = Field(..., alias="ContactType")
+    chat_room_owner: str = Field(..., alias="ChatRoomOwner")
+
+
+class GroupMessageModel(MessageModel):
+    user: GroupModel = Field(..., alias="User")
+    actual_nick_name: str = Field(..., alias="ActualNickName")
+    is_at: bool = Field(..., alias="IsAt")
+    actual_user_name: str = Field(..., alias="ActualUserName")

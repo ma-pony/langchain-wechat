@@ -5,10 +5,10 @@ import qrcode
 from loguru import logger
 
 from config import settings
-from src.ai import chat_with_text
 from src.dependencies import itchat
 from src.dependencies.itchat.content import INCOME_MSG
-from src.models.wechat import MessageModel, MessageTypeEnum
+from src.wechat.group import handle_group
+from src.wechat.single import handle_single
 
 
 class ContextType(Enum):
@@ -56,20 +56,11 @@ def logout_callback(*args, **kwargs):
     logger.info(f"Wechat logout Success, user_id: {user_id}, nickname: {name}")
 
 
-@itchat.msg_register(INCOME_MSG)
-def handle_single(cmsg):
-    """"""
-    logger.info(f"Message: {cmsg}")
-    message = MessageModel(**cmsg)
-    logger.info(f"Message content: {message.content}")
-    if message.type == MessageTypeEnum.TEXT:
-        res = chat_with_text(message.content)
-        logger.info(res)
-        logger.info(f"Text message: {message.content}")
-        itchat.send(res, toUserName=message.from_user_id)
-
-
 def start_channel():
+    # register message listener
+    itchat.msg_register(INCOME_MSG)(handle_single)
+    itchat.msg_register(INCOME_MSG, isGroupChat=True)(handle_group)
+
     itchat.instance.receivingRetryCount = 600  # 修改断线超时时间
     status_path = os.path.join("itchat.pkl")
     itchat.auto_login(
