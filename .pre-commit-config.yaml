@@ -1,0 +1,39 @@
+default_language_version:
+  python: python3.10
+files: ".*.py|json"
+default_stages: [ commit, push ]
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+      - id: check-yaml
+      - id: pretty-format-json
+        args: [ "--autofix" ]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.15.1
+    hooks:
+      - id: pyupgrade
+        args:
+          - --py3-plus
+          - --keep-runtime-typing
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.352
+    hooks:
+      - id: pyright
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.3.1
+    hooks:
+      - id: ruff
+        args:
+          - --fix
+          - --unsafe-fixes
+      - id: ruff-format
+
+  - repo: https://github.com/python-poetry/poetry
+    rev: 1.8.0
+    hooks:
+      - id: poetry-export
+        args: [ "--without-hashes", "-f", "requirements.txt", "-o", "packages/scrapy_spiders/requirements.txt" ]

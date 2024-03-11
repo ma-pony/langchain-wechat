@@ -1,0 +1,36 @@
+{
+  "defineConstant": {
+    "DEBUG": true
+  },
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/tests",
+    "**/itchat/**"
+  ],
+  "executionEnvironments": [
+    {
+      "pythonVersion": "3.10",
+      "root": "src"
+    }
+  ],
+  "include": [
+    "src"
+  ],
+  "pythonPlatform": "Linux",
+  "pythonVersion": "3.10",
+  "reportGeneralTypeIssues": false,
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false,
+  "reportMissingParameterType": false,
+  "reportMissingTypeStubs": false,
+  "reportUnknownArgumentType": false,
+  "reportUnknownMemberType": false,
+  "reportUnknownParameterType": false,
+  "reportUnknownVariableType": false,
+  "reportUntypedBaseClass": false,
+  "reportUntypedFunctionDecorator": false,
+  "reportUnusedFunction": "warning",
+  "typeCheckingMode": "strict",
+  "verboseOutput": true
+}

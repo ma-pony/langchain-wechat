@@ -9,6 +9,8 @@ python >= 3.10
 
 ```shell
 poetry install
+# 或者
+make install
 ```
 
 或者
