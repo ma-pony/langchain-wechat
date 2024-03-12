@@ -30,6 +30,32 @@ pip install -r requirements.txt
 uvicorn src.main:app
 ```
 
+## 配置项
+在config/.env文件中配置
+
+```shell
+# openai 模型
+OPENAI_MODEL="gpt-3.5-turbo-1106"
+# openai api key
+OPENAI_API_KEY="your-openai-api-key"
+
+# 模型 temperature
+AI_TEMPERATURE=0.7
+# 模型系统角色提示词
+AI_SYSTEM_ROLE_PROMPT="系统："
+
+# 聊天记录保存最大长度
+CHAT_MAX_MESSAGE_HISTORY_LENGTH=10
+# 触发聊天记录总结的阈值
+CHAT_MESSAGE_HISTORY_SUMMARY_THRESHOLD=5
+
+
+# 微信是否开启热重载
+WECHAT_HOT_RELOAD=False
+# 微信用户数据保存路径
+WECHAT_USER_DATA_STORAGE_PATH="wechat.pkl"
+```
+
 ## 功能
 
 - 单人消息发送回复
