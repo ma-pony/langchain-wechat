@@ -1,7 +1,11 @@
 # langchain-wechat
 
 基于fastapi + langchain + itchat 搭建的微信聊天机器人
+
 灵感来自于 chatgpt-on-wechat 项目
+
+您的star就是对我最大的鼓励🤩
+
 
 > [!NOTE]
 > 本项目仅供个人学习交流使用，使用者必须遵循 OpenAI 的[使用条款](https://openai.com/policies/terms-of-use)以及**中国法律法规**使用，不得用于非法用途。
