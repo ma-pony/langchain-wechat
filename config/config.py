@@ -44,3 +44,6 @@ class Settings(BaseSettings):
     # itchat
     WECHAT_HOT_RELOAD: bool = False  # 是否热重载
     WECHAT_USER_DATA_STORAGE_PATH: str = "storage"  # 用户数据存储路径
+
+    # redis
+    REDIS_URL: str = "redis://localhost:6379/0"
