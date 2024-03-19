@@ -2,13 +2,12 @@
 
 基于fastapi + langchain + itchat 搭建的微信聊天机器人，灵感来自于 chatgpt-on-wechat 项目
 
-你的star就是对我最大的鼓励🤩
+**你的star就是对我最大的鼓励🤩**
 
 ---
 
 > [!NOTE]
-> 本项目仅供个人学习交流使用，使用者必须遵循 OpenAI 的[使用条款](https://openai.com/policies/terms-of-use)以及**中国法律法规
-**使用，不得用于非法用途。
+> 本项目仅供个人学习交流使用，使用者必须遵循 OpenAI 的[使用条款](https://openai.com/policies/terms-of-use)以及 **中国法律法规** 使用，不得用于非法用途。
 >
 > 根据[《生成式人工智能服务管理暂行办法》](http://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm)
 > 的要求，请勿对中国地区公众提供一切未经备案的生成式人工智能服务。
