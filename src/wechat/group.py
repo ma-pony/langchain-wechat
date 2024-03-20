@@ -2,7 +2,7 @@ from loguru import logger
 
 from src.ai import chat_with_text
 from src.dependencies import itchat
-from src.models.wechat import MessageTypeEnum, GroupMessageModel
+from src.models.wechat import GroupMessageModel, MessageTypeEnum
 
 
 def is_call_me(message: GroupMessageModel):
@@ -27,7 +27,7 @@ def handle_group(msg):
     if not is_call_me(message):
         return
     if message.type == MessageTypeEnum.TEXT:
-        res = chat_with_text(message.content)
+        res = chat_with_text(message.content, session_id=f"{message.from_user_id}-{message.to_user_id}")
         logger.info(res)
         logger.info(f"Text message: {message.content}")
         itchat.send(res, toUserName=message.from_user_id)

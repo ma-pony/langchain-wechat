@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -22,7 +22,7 @@ class RecommendInfoModel(BaseModel):
 
 
 class UserModel(BaseModel):
-    member_list: list = Field(default=None, alias="MemberList")
+    member_list: list[Any] = Field(default=None, alias="MemberList")
     uin: int = Field(..., alias="Uin")
     user_name: str = Field(..., alias="UserName")
     nick_name: str = Field(..., alias="NickName")
@@ -90,7 +90,7 @@ class MessageModel(BaseModel):
     status_notify_user_name: str = Field(..., alias="StatusNotifyUserName")
     recommend_info: RecommendInfoModel = Field(..., alias="RecommendInfo")
     forward_flag: int = Field(..., alias="ForwardFlag")
-    app_info: dict = Field(..., alias="AppInfo")
+    app_info: dict[str, Any] = Field(..., alias="AppInfo")
     has_product_id: int = Field(..., alias="HasProductId")
     ticket: str = Field(..., alias="Ticket")
     img_height: int = Field(..., alias="ImgHeight")
@@ -106,7 +106,7 @@ class MessageModel(BaseModel):
 
 
 class ChatRoomMember(BaseModel):
-    member_list: list = Field(default=None, alias="MemberList")
+    member_list: list[Any] = Field(default=None, alias="MemberList")
     uin: int = Field(..., alias="Uin")
     user_name: str = Field(..., alias="UserName")
     nick_name: str = Field(..., alias="NickName")
@@ -122,13 +122,13 @@ class ChatRoomMember(BaseModel):
 class GroupModel(UserModel):
     is_admin: Optional[int] = Field(default=None, alias="IsAdmin")
     self: ChatRoomMember = Field(..., alias="Self")
-    head_img_update_flag: int = Field(..., alias="HeadImgUpdateFlag")
-    contact_type: int = Field(..., alias="ContactType")
-    chat_room_owner: str = Field(..., alias="ChatRoomOwner")
+    head_img_update_flag: int = Field(default=None, alias="HeadImgUpdateFlag")
+    contact_type: int = Field(default=None, alias="ContactType")
+    chat_room_owner: str = Field(default=None, alias="ChatRoomOwner")
 
 
 class GroupMessageModel(MessageModel):
-    user: GroupModel = Field(..., alias="User")
+    group: GroupModel = Field(..., alias="User")
     actual_nick_name: str = Field(..., alias="ActualNickName")
     is_at: bool = Field(..., alias="IsAt")
     actual_user_name: str = Field(..., alias="ActualUserName")

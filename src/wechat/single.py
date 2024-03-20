@@ -16,7 +16,7 @@ def handle_single(msg):
     message = MessageModel(**msg)
     logger.info(f"Message content: {message.content}")
     if message.type == MessageTypeEnum.TEXT:
-        res = chat_with_text(message.content)
+        res = chat_with_text(message.content, session_id=f"{message.from_user_id}-{message.to_user_id}")
         logger.info(res)
         logger.info(f"Text message: {message.content}")
         itchat.send(res, toUserName=message.from_user_id)
