@@ -1,14 +1,23 @@
 import os
 from enum import Enum
 
-import qrcode
 from loguru import logger
+from qrcode.main import QRCode
 
 from config import settings
 from src.dependencies import itchat
 from src.dependencies.itchat.content import INCOME_MSG
 from src.wechat.group import handle_group
 from src.wechat.single import handle_single
+
+# 获取当前脚本所在的目录
+current_dir = os.path.dirname(__file__)
+
+# 获取上一级目录的路径
+parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+
+# 获取上上一级目录
+grandparent_dir = os.path.abspath(os.path.join(parent_dir, os.pardir))
 
 
 class ContextType(Enum):
@@ -32,7 +41,7 @@ def qrcode_callback(uuid, status, qr_code):
 
     if status == "0":
         logger.info("QR code scanned")
-        qr = qrcode.QRCode(border=1)
+        qr = QRCode(border=1)
         qr.add_data(url)
         qr.make(fit=True)
         qr.print_ascii(invert=True)
@@ -62,14 +71,14 @@ def start_channel():
     itchat.msg_register(INCOME_MSG, isGroupChat=True)(handle_group)
 
     itchat.instance.receivingRetryCount = 600  # 修改断线超时时间
-    status_path = os.path.join("itchat.pkl")
+    status_path = os.path.join(grandparent_dir, settings.WECHAT_USER_DATA_STORAGE_PATH, "itchat.pkl")
     itchat.auto_login(
         enableCmdQR=2,
         hotReload=settings.WECHAT_HOT_RELOAD,
         statusStorageDir=status_path,
         qrCallback=qrcode_callback,
         exitCallback=logout_callback,
-        loginCallback=login_callback
+        loginCallback=login_callback,
     )
 
     # start message listener

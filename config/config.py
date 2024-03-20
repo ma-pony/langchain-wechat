@@ -42,7 +42,7 @@ class Settings(BaseSettings):
     CHAT_MESSAGE_HISTORY_SUMMARY_THRESHOLD: int = 5  # 聊天记录总结阈值
 
     # itchat
-    WECHAT_HOT_RELOAD: bool = False  # 是否热重载
+    WECHAT_HOT_RELOAD: bool = True  # 是否热重载
     WECHAT_USER_DATA_STORAGE_PATH: str = "storage"  # 用户数据存储路径
 
     # redis
