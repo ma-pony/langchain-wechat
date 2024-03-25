@@ -1,34 +1,44 @@
+from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain.schema import (
     SystemMessage,
 )
 from langchain_community.chat_message_histories import RedisChatMessageHistory
+from langchain_community.tools.ddg_search.tool import DuckDuckGoSearchResults
+from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
 from config import settings
+from src.ai.tools.date import get_current_date, get_current_datetime
 
-#
-# from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
-#
-# wrapper = DuckDuckGoSearchAPIWrapper(region="cn-zh", max_results=10)
-# search = DuckDuckGoSearchResults(api_wrapper=wrapper)
+wrapper = DuckDuckGoSearchAPIWrapper(region="cn-zh", max_results=10)
+search = DuckDuckGoSearchResults(api_wrapper=wrapper)
 
 max_message_history_length = settings.CHAT_MAX_MESSAGE_HISTORY_LENGTH
 message_summarization_threshold = settings.CHAT_MESSAGE_HISTORY_SUMMARY_THRESHOLD
 
-# tools = [
-#     Tool(
-#
-#         name="Search",
-#         func=search.run,
-#         description="当您需要回答有关时事的问题时很有用",
-#     ),
-# ]
-# chat_with_tools = chat.bind_tools(tools)
+
+tools = [
+    Tool(
+        name="Search",
+        func=search.run,
+        description="当您需要回答有关时事的问题时很有用",
+    ),
+    Tool(
+        name="CurrentDate",
+        func=get_current_date,
+        description="需要获取当前日期的时候很有用",
+    ),
+    Tool(
+        name="CurrentDatetime",
+        func=get_current_datetime,
+        description="需要获取当前时间的时候很有用",
+    ),
+]
 
 
 def get_message_history(session_id: str) -> RedisChatMessageHistory:
@@ -41,23 +51,26 @@ class ChatAgent:
         session_id: str,
         system_message: SystemMessage = settings.AI_SYSTEM_ROLE_PROMPT,
     ):
-        self.chat = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=settings.AI_TEMPERATURE)
-        self.prompt = ChatPromptTemplate.from_messages(
+        chat = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=settings.AI_TEMPERATURE)
+        prompt = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
                     system_message,
                 ),
                 MessagesPlaceholder(variable_name="chat_history"),
-                ("user", "{input}"),
+                ("human", "{input}"),
+                MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
-        self.chain = self.prompt | self.chat
+        agent = create_openai_tools_agent(chat, tools, prompt)
+
+        self.agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
         self.session_id = session_id
         self.ephemeral_chat_history = get_message_history(session_id)
 
         self.chain_with_message_history = RunnableWithMessageHistory(
-            self.chain,
+            self.agent_executor,
             get_message_history,
             input_messages_key="input",
             history_messages_key="chat_history",
@@ -88,7 +101,7 @@ class ChatAgent:
                 ),
             ]
         )
-        summarization_chain = summarization_prompt | self.chat
+        summarization_chain = summarization_prompt | self.agent_executor
 
         need_summary_messages = stored_messages[:-max_message_history_length]
 
@@ -106,13 +119,15 @@ class ChatAgent:
         self,
         input_message: str,
     ) -> AIMessage:
-        # `messages_summarized`可以是任何字符，只要它是一个有效的变量名
-        chain_with_summarization_trimming = (
-            RunnablePassthrough.assign(messages_summarized=self.summarize_trim_messages)
-            | self.chain_with_message_history
-        )
+        # # `messages_summarized`可以是任何字符，只要它是一个有效的变量名
+        # chain_with_summarization_trimming = (
+        #         RunnablePassthrough.assign(
+        #             messages_summarized=self.summarize_trim_messages
+        #         )
+        #         | self.chain_with_message_history
+        # )
 
-        ai_message = chain_with_summarization_trimming.invoke(
+        ai_message = self.chain_with_message_history.invoke(
             {"input": input_message},
             {"configurable": {"session_id": self.session_id}},
         )
@@ -123,4 +138,4 @@ class ChatAgent:
 def chat_with_text(message: str, session_id: str = "unused"):
     chat_agent = ChatAgent(session_id)
     ai_message = chat_agent.step(message)
-    return ai_message.content
+    return ai_message["output"]

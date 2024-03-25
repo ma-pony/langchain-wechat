@@ -20,8 +20,9 @@ uvicorn = "^0.27.1"
 loguru = "^0.7.2"
 qrcode = { extras = ["pil"], version = "^7.4.2" }
 pyqrcode = "^1.2.1"
-duckduckgo-search = "^5.0"
 redis = "^5.0.3"
+langchainhub = "^0.1.15"
+duckduckgo-search = "^5.1.0"
 
 
 [build-system]
