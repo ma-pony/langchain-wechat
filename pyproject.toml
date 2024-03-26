@@ -23,6 +23,7 @@ pyqrcode = "^1.2.1"
 redis = "^5.0.3"
 langchainhub = "^0.1.15"
 duckduckgo-search = "^5.1.0"
+httpx = {extras = ["socks"], version = "^0.27.0"}
 
 
 [build-system]
