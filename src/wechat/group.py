@@ -3,6 +3,7 @@ from loguru import logger
 from src.ai import chat_with_text
 from src.dependencies import itchat
 from src.models.wechat import GroupMessageModel, MessageTypeEnum
+from src.wechat.base import filter_message
 
 
 def is_call_me(message: GroupMessageModel):
@@ -13,7 +14,7 @@ def is_call_me(message: GroupMessageModel):
     return message.is_at
 
 
-# @itchat.msg_register(INCOME_MSG, isGroupChat=True)
+@filter_message
 def handle_group(msg):
     """
     监听群聊消息
