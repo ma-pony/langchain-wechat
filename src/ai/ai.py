@@ -7,6 +7,7 @@ from langchain_community.tools.ddg_search.tool import DuckDuckGoSearchResults
 from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
@@ -51,7 +52,7 @@ class ChatAgent:
         session_id: str,
         system_message: SystemMessage = settings.AI_SYSTEM_ROLE_PROMPT,
     ):
-        chat = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=settings.AI_TEMPERATURE)
+        self.chat = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=settings.AI_TEMPERATURE)
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -63,7 +64,7 @@ class ChatAgent:
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )
-        agent = create_openai_tools_agent(chat, tools, prompt)
+        agent = create_openai_tools_agent(self.chat, tools, prompt)
 
         self.agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
         self.session_id = session_id
@@ -101,7 +102,7 @@ class ChatAgent:
                 ),
             ]
         )
-        summarization_chain = summarization_prompt | self.agent_executor
+        summarization_chain = summarization_prompt | self.chat
 
         need_summary_messages = stored_messages[:-max_message_history_length]
 
@@ -120,14 +121,12 @@ class ChatAgent:
         input_message: str,
     ) -> AIMessage:
         # # `messages_summarized`可以是任何字符，只要它是一个有效的变量名
-        # chain_with_summarization_trimming = (
-        #         RunnablePassthrough.assign(
-        #             messages_summarized=self.summarize_trim_messages
-        #         )
-        #         | self.chain_with_message_history
-        # )
+        chain_with_summarization_trimming = (
+            RunnablePassthrough.assign(messages_summarized=self.summarize_trim_messages)
+            | self.chain_with_message_history
+        )
 
-        ai_message = self.chain_with_message_history.invoke(
+        ai_message = chain_with_summarization_trimming.invoke(
             {"input": input_message},
             {"configurable": {"session_id": self.session_id}},
         )
