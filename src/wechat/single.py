@@ -7,7 +7,7 @@ from src.wechat.base import filter_message
 
 
 # @itchat.msg_register(INCOME_MSG)
-@filter_message
+@filter_message(model=MessageModel)
 def handle_single(message: MessageModel):
     """
     监听私聊消息

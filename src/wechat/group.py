@@ -14,15 +14,13 @@ def is_call_me(message: GroupMessageModel):
     return message.is_at
 
 
-@filter_message
-def handle_group(msg):
+@filter_message(model=GroupMessageModel)
+def handle_group(message: GroupMessageModel):
     """
     监听群聊消息
-    :param msg:
+    :param message:
     :return:
     """
-    logger.info(f"Message: {msg}")
-    message = GroupMessageModel(**msg)
     logger.info(f"Message content: {message.content}")
 
     if not is_call_me(message):

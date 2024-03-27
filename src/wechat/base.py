@@ -38,9 +38,10 @@ def filter_repeat(message: MessageModel):
     return False
 
 
-def filter_message(func=None, expire=True, repeat=True, expire_seconds=60):
+def filter_message(func=None, *, model=None, expire=True, repeat=True, expire_seconds=60):
     """
     过滤消息
+    :param model:
     :param func:
     :param expire:
     :param repeat:
@@ -48,11 +49,11 @@ def filter_message(func=None, expire=True, repeat=True, expire_seconds=60):
     :return:
     """
     if func is None:
-        return partial(filter_message, expire=expire, repeat=repeat, expire_seconds=expire_seconds)
+        return partial(filter_message, model=model, expire=expire, repeat=repeat, expire_seconds=expire_seconds)
 
     @wraps(func)
     def wrapper(msg):
-        message = MessageModel(**msg)
+        message = model(**msg) if model else msg
         if expire and filter_expired(message, expire_seconds):
             return
         if repeat and filter_repeat(message):
