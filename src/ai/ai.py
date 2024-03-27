@@ -52,7 +52,11 @@ class ChatAgent:
         session_id: str,
         system_message: SystemMessage = settings.AI_SYSTEM_ROLE_PROMPT,
     ):
-        self.chat = ChatOpenAI(model=settings.OPENAI_MODEL, temperature=settings.AI_TEMPERATURE)
+        self.chat = ChatOpenAI(
+            model=settings.OPENAI_MODEL,
+            temperature=settings.AI_TEMPERATURE,
+            openai_api_key=settings.OPENAI_API_KEY,
+        )
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
