@@ -56,6 +56,7 @@ class ChatAgent:
             model=settings.OPENAI_MODEL,
             temperature=settings.AI_TEMPERATURE,
             openai_api_key=settings.OPENAI_API_KEY,
+            openai_proxy=settings.OPENAI_PROXY,
         )
         prompt = ChatPromptTemplate.from_messages(
             [

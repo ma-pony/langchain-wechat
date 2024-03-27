@@ -1,5 +1,5 @@
 import os
-from typing import Tuple, Type
+from typing import Optional, Tuple, Type
 
 from pydantic_settings import (
     BaseSettings,
@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     # openai
     OPENAI_MODEL: str = "gpt-3.5-turbo-1106"  # openai模型
     OPENAI_API_KEY: str = "sk-1234567890"  # openai api key
+    OPENAI_PROXY: Optional[str] = None  # openai代理
 
     # AI
     AI_TEMPERATURE: float = 0.5  # AI温度
