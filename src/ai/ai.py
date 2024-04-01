@@ -66,7 +66,13 @@ class ChatAgent:
         )
         agent = create_openai_tools_agent(self.chat, tools, prompt)
 
-        self.agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+        self.agent_executor = AgentExecutor(
+            agent=agent,
+            tools=tools,
+            verbose=True,
+            max_iterations=settings.AGENT_MAX_ITERATIONS,
+            max_execution_time=settings.AGENT_MAX_EXECUTION_TIME,
+        )
         self.session_id = session_id
         self.ephemeral_chat_history = get_message_history(session_id)
 

@@ -37,6 +37,8 @@ class Settings(BaseSettings):
     # AI
     AI_TEMPERATURE: float = 0.5  # AI温度
     AI_SYSTEM_ROLE_PROMPT: str = "你是一个有用的助手,尽你所能回答所有问题."  # AI系统角色提示词
+    AGENT_MAX_ITERATIONS: int = 10  # AI最大迭代次数
+    AGENT_MAX_EXECUTION_TIME: int = 30  # AI最大执行时间(秒)
 
     # 聊天记录
     CHAT_MAX_MESSAGE_HISTORY_LENGTH: int = 10  # 聊天记录最大长度
