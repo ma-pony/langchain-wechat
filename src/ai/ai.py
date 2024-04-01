@@ -3,8 +3,6 @@ from langchain.schema import (
     SystemMessage,
 )
 from langchain_community.chat_message_histories import RedisChatMessageHistory
-from langchain_community.tools.ddg_search.tool import DuckDuckGoSearchResults
-from langchain_community.utilities import DuckDuckGoSearchAPIWrapper
 from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
@@ -15,13 +13,10 @@ from loguru import logger
 
 from config import settings
 from src.ai.tools.date import get_current_date, get_current_datetime
-
-wrapper = DuckDuckGoSearchAPIWrapper(region="cn-zh", max_results=10)
-search = DuckDuckGoSearchResults(api_wrapper=wrapper)
+from src.ai.tools.duckduckgo import search
 
 max_message_history_length = settings.CHAT_MAX_MESSAGE_HISTORY_LENGTH
 message_summarization_threshold = settings.CHAT_MESSAGE_HISTORY_SUMMARY_THRESHOLD
-
 
 tools = [
     Tool(
