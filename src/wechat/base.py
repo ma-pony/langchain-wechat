@@ -1,6 +1,7 @@
 import time
 from functools import partial, wraps
 
+from loguru import logger
 from redis import Redis
 
 from config import settings
@@ -53,6 +54,7 @@ def filter_message(func=None, *, model=None, expire=True, repeat=True, expire_se
 
     @wraps(func)
     def wrapper(msg):
+        logger.info(f"Receive message: {msg}")
         message = model(**msg) if model else msg
         if expire and filter_expired(message, expire_seconds):
             return

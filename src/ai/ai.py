@@ -7,34 +7,25 @@ from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_core.tools import Tool
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
 from config import settings
-from src.ai.tools.date import get_current_date, get_current_datetime
-from src.ai.tools.duckduckgo import search
+from src.ai.tools.date import current_date_tool, current_datetime_tool
+from src.ai.tools.duckduckgo import duck_search_tool
+from src.ai.tools.python_repl import python_repl_tool
 
 max_message_history_length = settings.CHAT_MAX_MESSAGE_HISTORY_LENGTH
 message_summarization_threshold = settings.CHAT_MESSAGE_HISTORY_SUMMARY_THRESHOLD
 
 tools = [
-    Tool(
-        name="Search",
-        func=search.run,
-        description="当您需要回答有关时事的问题时很有用",
-    ),
-    Tool(
-        name="CurrentDate",
-        func=get_current_date,
-        description="需要获取当前日期的时候很有用",
-    ),
-    Tool(
-        name="CurrentDatetime",
-        func=get_current_datetime,
-        description="需要获取当前时间的时候很有用",
-    ),
+    duck_search_tool,
+    python_repl_tool,
+    current_date_tool,
+    current_datetime_tool,
 ]
+
+tool_names = [tool.name for tool in tools]
 
 
 def get_message_history(session_id: str) -> RedisChatMessageHistory:

@@ -101,7 +101,7 @@ class MessageModel(BaseModel):
     encry_file_name: str = Field(default=None, alias="EncryFileName")
     user: UserModel = Field(..., alias="User")
     type: MessageTypeEnum = Field(..., alias="Type")
-    text: str | list[str] = Field(..., alias="Text")
+    text: str | list[str] = Field(default=None, alias="Text")
     system_info: str = Field(default=None, alias="SystemInfo")
 
 
