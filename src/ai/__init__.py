@@ -1,1 +1,1 @@
-from .ai import *
+from .assistants import *
